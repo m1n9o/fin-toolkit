@@ -22,5 +22,30 @@ def calculate():
         'totalPayment': round(principal + total_interest, 2)
     })
 
+@app.route('/api/calculate-prepayment', methods=['POST'])
+def calculate_prepayment():
+    data = request.json
+    principal = float(data['principal'])
+    monthly_payment = float(data['monthlyPayment'])
+    rate = float(data['rate'])
+    current_interest = float(data['currentInterest'])
+
+    r = monthly_interest_rate(rate)
+    results = []
+
+    for prepayment in [100000, 200000, 300000, 400000]:
+        crp = calculate_remaining_periods(principal, monthly_payment, r, prepayment)
+        new_interest = interest(principal - prepayment, r, crp)
+        saved_interest = current_interest - new_interest
+
+        results.append({
+            'prepayment': prepayment,
+            'remainingPeriods': crp,
+            'newInterest': round(new_interest, 2),
+            'savedInterest': round(saved_interest, 2)
+        })
+
+    return jsonify(results)
+
 if __name__ == '__main__':
     app.run(debug=True)
