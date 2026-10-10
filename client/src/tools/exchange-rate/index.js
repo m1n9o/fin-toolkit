@@ -1,39 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
 import './style.css';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// 币种中文名称映射
+const currencyNames = {
+  CNY: '人民币',
+  USD: '美元',
+  EUR: '欧元',
+  SGD: '新加坡元',
+  JPY: '日元',
+  RUB: '俄罗斯卢布',
+  AUD: '澳大利亚元',
+  VND: '越南盾',
+  ESP: '西班牙比塞塔',
+  RON: '罗马尼亚列伊'
+};
 
 const ExchangeRate = () => {
-  const navigate = useNavigate();
   const [exchangeRates, setExchangeRates] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // 币种中文名称映射
-  const currencyNames = {
-    CNY: '人民币',
-    USD: '美元',
-    EUR: '欧元',
-    SGD: '新加坡元',
-    JPY: '日元',
-    RUB: '俄罗斯卢布',
-    AUD: '澳大利亚元',
-    VND: '越南盾',
-    ESP: '西班牙比塞塔',
-    RON: '罗马尼亚列伊'
-  };
 
   useEffect(() => {
     const fetchExchangeData = async () => {
@@ -71,9 +56,6 @@ const ExchangeRate = () => {
 
   return (
     <div className="exchange-container">
-      <button onClick={() => navigate('/')} className="back-button">
-        ← 返回首页
-      </button>
       <h1>实时汇率表</h1>
       <div className="table-container">
         {loading ? (

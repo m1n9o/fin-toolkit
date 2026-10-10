@@ -1,42 +1,26 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_ENDPOINTS } from '../../config';
+import { calculatePrepayment } from '../../utils/loan';
 import './style.css';
 
 const PrepaymentCalculator = () => {
-  const navigate = useNavigate();
   const [principal, setPrincipal] = useState('');
   const [monthlyPayment, setMonthlyPayment] = useState('');
   const [rate, setRate] = useState('');
   const [currentInterest, setCurrentInterest] = useState('');
   const [prepaymentResults, setPrepaymentResults] = useState([]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://127.0.0.1:5000/api/calculate-prepayment', {
-        principal: parseFloat(principal),
-        monthlyPayment: parseFloat(monthlyPayment),
-        rate: parseFloat(rate),
-        currentInterest: parseFloat(currentInterest)
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      });
-      setPrepaymentResults(response.data);
-    } catch (error) {
-      console.error('Error calculating:', error);
-    }
+    setPrepaymentResults(calculatePrepayment({
+      principal: parseFloat(principal),
+      monthlyPayment: parseFloat(monthlyPayment),
+      rate: parseFloat(rate),
+      currentInterest: parseFloat(currentInterest)
+    }));
   };
 
   return (
     <div className="calculator-container">
-      <button onClick={() => navigate('/')} className="back-button">
-        ← 返回首页
-      </button>
       <h1>提前还款计算器</h1>
       <p className="explanation-text">此方法基于等额本息算法, 并默认采用"月供不变，减少还款期数"</p>
       <form onSubmit={handleSubmit}>
@@ -101,9 +85,15 @@ const PrepaymentCalculator = () => {
               {prepaymentResults.map((result, index) => (
                 <tr key={index}>
                   <td>¥{result.prepayment}</td>
-                  <td>{result.remainingPeriods} 月</td>
-                  <td>¥{result.newInterest}</td>
-                  <td>¥{result.savedInterest}</td>
+                  {Number.isNaN(result.remainingPeriods) ? (
+                    <td colSpan={3}>月供不足以覆盖利息，无法还清</td>
+                  ) : (
+                    <>
+                      <td>{result.remainingPeriods} 月</td>
+                      <td>¥{result.newInterest}</td>
+                      <td>¥{result.savedInterest}</td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import PrepaymentCalculator from './components/Calculator';
-import ExchangeRate from './components/ExchangeRate';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import ToolLayout from './components/ToolLayout';
+import tools from './tools';
 import './App.css';
 
 function App() {
@@ -10,8 +10,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/prepayment-calculator" element={<PrepaymentCalculator />} />
-        <Route path="/exchange-rate" element={<ExchangeRate />} />
+        {tools.map(({ path, component: Tool }) => (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={<ToolLayout><Tool /></ToolLayout>}
+          />
+        ))}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
