@@ -13,9 +13,9 @@ npm start
 ## 新增工具
 
 1. 在 `client/src/tools/` 下新建目录，例如 `my-tool/index.js`，默认导出一个 React 组件
-2. 在 `client/src/tools/index.js` 的注册表中加一项（`path`、`name`、`icon`、`description`、`component`）
+2. 在 `client/src/tools/index.js` 的注册表中加一项（`path`、`name`、`icon`、`description`、`component`），`icon` 取 `client/src/components/Icon` 中的图标名
 
-首页卡片、路由、返回按钮会自动生成，访问地址为 `#/my-tool`。
+首页卡片、顶部导航、路由、页面标题会自动生成，访问地址为 `#/my-tool`。
 
 ## 部署
 

@@ -1,13 +1,58 @@
-.back-button {
-  margin: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #4299e1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.tool-page {
+  animation: rise 0.5s var(--ease) both;
 }
 
-.back-button:hover {
-  background-color: #3182ce;
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  text-decoration: none;
+  transition: color 0.2s, gap 0.2s var(--ease);
+}
+
+.back-link:hover {
+  color: var(--ink);
+  gap: 0.6rem;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.tool-header-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  color: var(--accent);
+}
+
+.tool-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.tool-subtitle {
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+}
+
+.tool-loading {
+  padding: 4rem 0;
+  text-align: center;
+  color: var(--ink-faint);
 }

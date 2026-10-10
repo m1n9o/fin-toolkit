@@ -1,37 +1,318 @@
-.exchange-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem;
+.fx {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.table-container {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+.fx-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.fx-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+
+.fx-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+
+.fx-status.is-live .fx-dot {
+  background: #2f9e6f;
+}
+
+.fx-status.is-live .fx-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: pulse 2s ease-out infinite;
+}
+
+.fx-refresh {
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+.fx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.fx-tile {
+  padding: 1.35rem 1.5rem;
+  animation: rise 0.5s var(--ease) both;
+}
+
+.fx-tile:nth-child(2) { animation-delay: 0.05s; }
+.fx-tile:nth-child(3) { animation-delay: 0.1s; }
+.fx-tile:nth-child(4) { animation-delay: 0.15s; }
+
+.fx-tile.skeleton {
+  height: 138px;
+  background: linear-gradient(100deg, var(--surface) 30%, var(--surface-muted) 50%, var(--surface) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  box-shadow: none;
+}
+
+.fx-tile-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.fx-name {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.fx-tile-value {
   margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+.fx-tile-foot {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
 }
 
-th {
-  background-color: #f5f5f5;
+.fx-code {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: var(--gold-soft);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
-tr:hover {
-  background-color: #f9f9f9;
+.fx-table {
+  overflow-x: auto;
+  animation: rise 0.5s 0.2s var(--ease) both;
 }
 
-.update-time {
-  color: #666;
-  margin-bottom: 1rem;
+.fx-currency {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.fx-strong {
+  font-weight: 600;
+}
+
+.fx-error {
+  padding: 1rem;
+  text-align: center;
+  color: var(--danger);
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* 汇率换算 */
+.fx-converter {
+  padding: 1.5rem 1.75rem;
+  background:
+    radial-gradient(100% 140% at 0% 0%, var(--accent-soft), transparent 60%),
+    var(--surface);
+  animation: rise 0.5s var(--ease) both;
+}
+
+.fx-converter-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 1rem;
+}
+
+.fx-converter-side {
+  display: block;
+  min-width: 0;
+}
+
+.fx-converter-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.fx-converter-input {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.fx-converter-input:focus-within {
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.fx-converter-input input,
+.fx-converter-input output {
+  flex: 1;
+  min-width: 0;
+  padding: 0 1rem;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-converter-input input::-webkit-outer-spin-button,
+.fx-converter-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fx-converter-input input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.fx-converter-input.is-output {
+  background: var(--surface-muted);
+}
+
+.fx-converter-input.is-output output {
+  color: var(--accent);
+}
+
+.fx-select {
+  flex: none;
+  max-width: 50%;
+  height: 100%;
+  padding: 0 2rem 0 1rem;
+  border: none;
+  border-left: 1px solid var(--line);
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8d94' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 0.8rem center;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  text-overflow: ellipsis;
+}
+
+.fx-swap {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.35s var(--ease), color 0.2s, border-color 0.2s;
+}
+
+.fx-swap:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: rotate(180deg);
+}
+
+.fx-swap:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.fx-converter-rate {
+  margin-top: 0.9rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 720px) {
+  .fx-converter {
+    padding: 1.25rem;
+  }
+
+  .fx-converter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-converter-input input,
+  .fx-converter-input output {
+    padding: 0 0.85rem;
+    font-size: 1.2rem;
+  }
+
+  .fx-select {
+    max-width: 42%;
+    padding: 0 1.75rem 0 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .fx-swap {
+    justify-self: center;
+    margin: 0;
+    transform: rotate(90deg);
+  }
+
+  .fx-swap:hover {
+    transform: rotate(270deg);
+  }
 }

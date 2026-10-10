@@ -23,9 +23,11 @@ export const remainingPeriods = (principal, monthlyPayment, mir, prepayment) => 
 
 const PREPAYMENT_AMOUNTS = [100000, 200000, 300000, 400000];
 
-export const calculatePrepayment = ({ principal, monthlyPayment, rate, currentInterest }) => {
+export const calculatePrepayment = ({
+  principal, monthlyPayment, rate, currentInterest, amounts = PREPAYMENT_AMOUNTS,
+}) => {
   const mir = monthlyInterestRate(rate);
-  return PREPAYMENT_AMOUNTS.filter((p) => p < principal).map((prepayment) => {
+  return amounts.filter((p) => p < principal).map((prepayment) => {
     const periods = remainingPeriods(principal, monthlyPayment, mir, prepayment);
     const newPrincipal = principal - prepayment;
     const newInterest =

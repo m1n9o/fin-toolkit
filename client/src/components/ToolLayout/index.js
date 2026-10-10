@@ -1,17 +1,30 @@
-import React, { Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Icon from '../Icon';
 import './style.css';
 
-const ToolLayout = ({ children }) => {
-  const navigate = useNavigate();
+const ToolLayout = ({ tool, children }) => {
+  useEffect(() => {
+    document.title = `${tool.name} · 理财工具包`;
+  }, [tool.name]);
 
   return (
-    <>
-      <button onClick={() => navigate('/')} className="back-button">
-        ← 返回首页
-      </button>
-      <Suspense fallback={<p>加载中...</p>}>{children}</Suspense>
-    </>
+    <div className="tool-page">
+      <Link to="/" className="back-link">
+        <Icon name="arrowLeft" size={16} />
+        返回首页
+      </Link>
+      <header className="tool-header">
+        <span className="tool-header-icon">
+          <Icon name={tool.icon} size={26} />
+        </span>
+        <div>
+          <h1 className="tool-title">{tool.name}</h1>
+          <p className="tool-subtitle">{tool.description}</p>
+        </div>
+      </header>
+      <Suspense fallback={<div className="tool-loading">加载中…</div>}>{children}</Suspense>
+    </div>
   );
 };
 
