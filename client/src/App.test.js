@@ -1,8 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import App from './App';
+import tools from './tools';
 
-test('renders learn react link', () => {
+test('home page lists every registered tool', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const main = screen.getByRole('main');
+  tools.forEach((tool) => {
+    expect(within(main).getByText(tool.name)).toBeInTheDocument();
+  });
 });

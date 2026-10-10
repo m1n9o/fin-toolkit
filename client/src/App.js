@@ -1,18 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import PrepaymentCalculator from './components/Calculator';
-import ExchangeRate from './components/ExchangeRate';
-import './App.css';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import Shell from './components/Shell';
+import ToolLayout from './components/ToolLayout';
+import tools from './tools';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/prepayment-calculator" element={<PrepaymentCalculator />} />
-        <Route path="/exchange-rate" element={<ExchangeRate />} />
-      </Routes>
+      <Shell>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {tools.map((tool) => (
+            <Route
+              key={tool.path}
+              path={`/${tool.path}`}
+              element={<ToolLayout tool={tool}><tool.component /></ToolLayout>}
+            />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Shell>
     </Router>
   );
 }
